@@ -415,7 +415,7 @@ if ($GLOBALS['db_connect'])
 				if (strpos($post_config['csp'], 'https://www.google.com/recaptcha/') === false)
 				{
 					$post_config['csp'] = str_replace('script-src \'self\'', 'script-src \'self\' https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/', $post_config['csp']);
-					$post_config['csp'] .= ' frame-src \'self\' https://www.google.com/recaptcha/ https://recaptcha.google.com/recaptcha/;';
+					$post_config['csp'] .= ' frame-src \'self\' https://www.google.com/recaptcha/ https://recaptcha.google.com/recaptcha/; connect-src \'self\' https://www.google.com/recaptcha/;';
 				}
 			}
 
