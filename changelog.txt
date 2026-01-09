@@ -1,9 +1,9 @@
-version 3.42 2026-01-06
+version 3.42 2026-01-09
+- upgraded to PHPMailer 7.0.2 (2026-01-09)
 - added connect-src to Google reCAPTCHA CSP
 - fixed undefined variable warning $version_local in header.php
 - added checks for PHP 8.5 to fix curl_close() deprecation warnings
 - added checks for $config_hide to suppress display of config values from custom.php
-- upgraded to PHPMailer 7.0.1 (2025-11-25)
 - moved PayPal_REST + AuthorizeNet API requests to JSON files
 - PHP short array syntax
 - added $config['password_reset_exp'] (default = 3600)
