@@ -363,6 +363,14 @@ $defaults = [
 			'required' => '',
 			'allowed' => ''
 		],
+		'version_remote_url' => [
+			'name' => 'version_remote_url',
+			'value' => 'submissionmanager.net',
+			'description' => 'URL for remote version check',
+			'type' => 'select|submissionmanager.net,github.com',
+			'required' => '',
+			'allowed' => ''
+		],
 		'send_mail_staff' => [
 			'name' => 'send_mail_staff',
 			'value' => 'Y',

@@ -4346,7 +4346,7 @@ else // if staff login
 						$dir = array_diff(scandir($config['upload_path']), ['.','..']);
 						foreach ($dir as $value)
 						{
-							if (is_dir($config['upload_path'] . $value))
+							if (is_dir($config['upload_path'] . $value) && is_numeric($value) && strlen($value) == 4)
 							{
 								$compare[$value]['records'] = [];
 								$compare[$value]['files'] = [];
@@ -5014,9 +5014,9 @@ else // if staff login
 					{
 						if (!isset($version_local) || !isset($version_remote)) {check_version('SubMgr', true);}
 
-						// $version_remote_url = 'https://www.submissionmanager.net/changelog.txt';
-						$version_remote_url = 'https://github.com/devinemke/submgr/blob/main/changelog.txt';
-						if ($version_remote != '???') {$version_remote_display = '<a href="' . $version_remote_url . '" target="_blank">' . $version_remote . '</a>';} else {$version_remote_display = $version_remote;}
+						// $changelog_remote_url = 'https://www.submissionmanager.net/changelog.txt';
+						$changelog_remote_url = 'https://github.com/devinemke/submgr/blob/main/changelog.txt';
+						if ($version_remote != '???') {$version_remote_display = '<a href="' . $changelog_remote_url . '" target="_blank">' . $version_remote . '</a>';} else {$version_remote_display = $version_remote;}
 
 						echo '
 						<table class="padding_lr_5">

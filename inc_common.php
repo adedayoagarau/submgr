@@ -108,6 +108,8 @@ $local_variables = [
 
 function check_version($software, $get_remote = false)
 {
+	global $config;
+
 	if ($software == 'PHP')
 	{
 		$version = PHP_VERSION;
@@ -131,11 +133,11 @@ function check_version($software, $get_remote = false)
 
 		if ($get_remote)
 		{
-			$version_url = 'https://www.submissionmanager.net/version.txt';
-			// $version_url = 'https://raw.githubusercontent.com/devinemke/submgr/refs/heads/main/version.txt';
+			$version_remote_url_array = ['submissionmanager.net' => 'https://www.submissionmanager.net/version.txt', 'github.com' => 'https://raw.githubusercontent.com/devinemke/submgr/refs/heads/main/version.txt'];
+			if (isset($config['version_remote_url']) && $config['version_remote_url'] && isset($version_remote_url_array[$config['version_remote_url']])) {$version_remote_url = $version_remote_url_array[$config['version_remote_url']];} else {$version_remote_url = reset($version_remote_url_array);}
 			$options = ['http' => ['user_agent' => $_SERVER['HTTP_USER_AGENT'], 'timeout' => 10.0, 'ignore_errors' => true]];
 			$context = stream_context_create($options);
-			$version = @file_get_contents($version_url, false, $context);
+			$version = @file_get_contents($version_remote_url, false, $context);
 			if ($version) {$version_remote = trim($version);} else {$version_remote = '???';}
 			$GLOBALS['version_remote'] = $version_remote;
 		}
