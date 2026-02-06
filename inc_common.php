@@ -453,12 +453,14 @@ if ($GLOBALS['db_connect'])
 
 	function get_config()
 	{
+		global $config_defaults;
 		$GLOBALS['config'] = []; // flush out config
 
 		$result = @mysqli_query($GLOBALS['db_connect'], 'SELECT * FROM config') or exit_error('query failure: SELECT config');
 		if (mysqli_num_rows($result))
 		{
-			while ($row = mysqli_fetch_assoc($result)) {$GLOBALS['config'][$row['name']] = $row['value'];}
+			while ($row = mysqli_fetch_assoc($result)) {$config[$row['name']] = $row['value'];}
+			foreach ($config_defaults as $key => $value) {if (array_key_exists($key, $config)) {$GLOBALS['config'][$key] = $config[$key];}}
 		}
 		else
 		{
@@ -1061,7 +1063,7 @@ function get_file_types()
 
 function get_fields()
 {
-	global $show_tables;
+	global $show_tables, $defaults;
 
 	$GLOBALS['fields'] = [];
 	if (in_array('fields', $show_tables))
@@ -1077,8 +1079,9 @@ function get_fields()
 				if ($row['field'] == 'genre_id') {$row['list'] = 'genres';}
 				if ($row['field'] == 'cc_exp_month') {$row['list'] = 'months';}
 				if ($row['field'] == 'cc_exp_year') {$row['list'] = 'years';}
-				$GLOBALS['fields'][$row['field']] = $row;
+				$fields[$row['field']] = $row;
 			}
+			foreach ($defaults['fields'] as $key => $value) {if (array_key_exists($key, $fields)) {$GLOBALS['fields'][$key] = $fields[$key];}}
 			$_SESSION['fields'] = $GLOBALS['fields'];
 		}
 	}
@@ -1091,7 +1094,7 @@ function get_groups()
 	$GLOBALS['groups'] = [];
 	if (in_array('groups', $show_tables))
 	{
-		$result = @mysqli_query($GLOBALS['db_connect'], 'SELECT * FROM `groups`') or exit_error('query failure: SELECT groups');
+		$result = @mysqli_query($GLOBALS['db_connect'], 'SELECT * FROM `groups` ORDER BY name +0') or exit_error('query failure: SELECT groups');
 		if ($result && mysqli_num_rows($result))
 		{
 			while ($row = mysqli_fetch_assoc($result)) {$GLOBALS['groups'][$row['name']] = $row;}

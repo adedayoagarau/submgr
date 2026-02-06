@@ -3700,12 +3700,6 @@ else // if staff login
 
 						if (isset($config_hide)) {get_config();} // refetch from db so custom values are not shown
 						if ($submit == 'update' && !$form_check) {$config_array = $post_config;} else {$config_array = $config;}
-
-						foreach ($config_defaults as $key => $value)
-						{
-							if (array_key_exists($key, $config_array)) {$config_array_sorted[$key] = $config_array[$key];}
-						}
-
 						include_once('inc_lists.php');
 
 						echo '
@@ -3718,7 +3712,7 @@ else // if staff login
 						</tr>
 						';
 
-						foreach ($config_array_sorted as $key => $value)
+						foreach ($config_array as $key => $value)
 						{
 							$value = htmlspecialchars((string) $value);
 
@@ -4520,17 +4514,7 @@ else // if staff login
 						';
 
 						if (isset($config_hide)) {get_config();} // refetch from db so custom values are not shown
-
-						foreach ($config_defaults as $key => $value)
-						{
-							if (array_key_exists($key, $config)) {$config_array_sorted[$key] = $config[$key];}
-						}
-
-						foreach ($config_array_sorted as $key => $value)
-						{
-							if ($key == 'mail_method' || strpos($key, 'smtp') !== false) {$test_mail[$key] = $value;}
-						}
-
+						foreach ($config as $key => $value) {if ($key == 'mail_method' || strpos($key, 'smtp') !== false) {$test_mail[$key] = $value;}}
 						$test_mail['from_name'] = $config['company_name'];
 						$test_mail['from_email'] = $config['general_dnr_email'];
 						$test_mail['to_email'] = '';

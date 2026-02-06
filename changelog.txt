@@ -1,4 +1,5 @@
-version 3.42 2026-01-16
+version 3.42 2026-02-05
+- refactoring of default table/array sorting: $config $fields $groups
 - added $config['version_remote_url'] (default = submissionmanager.net)
 - upgraded to PHPMailer 7.0.2 (2026-01-09)
 - added connect-src to Google reCAPTCHA CSP
