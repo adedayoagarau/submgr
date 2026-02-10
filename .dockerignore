@@ -1,0 +1,10 @@
+.git
+.gitignore
+README.md
+readme.md
+changelog.txt
+license.txt
+documentation.html
+Dockerfile
+docker-compose.yml
+.dockerignore
