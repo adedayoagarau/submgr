@@ -8,8 +8,11 @@ RUN apt-get update && apt-get install -y libtidy-dev && \
     docker-php-ext-install tidy && \
     rm -rf /var/lib/apt/lists/*
 
-# Fix Apache MPM conflict: disable mpm_event, enable mpm_prefork (required for mod_php)
-RUN a2dismod mpm_event && a2enmod mpm_prefork
+# Fix Apache MPM conflict: ensure ONLY mpm_prefork is loaded
+RUN a2dismod mpm_worker 2>/dev/null; \
+    a2dismod mpm_event 2>/dev/null; \
+    a2dismod mpm_prefork 2>/dev/null; \
+    a2enmod mpm_prefork
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
