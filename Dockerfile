@@ -8,20 +8,19 @@ RUN apt-get update && apt-get install -y libtidy-dev && \
     docker-php-ext-install tidy && \
     rm -rf /var/lib/apt/lists/*
 
-# Fix Apache MPM conflict: ensure ONLY mpm_prefork is loaded
-RUN a2dismod mpm_worker 2>/dev/null; \
-    a2dismod mpm_event 2>/dev/null; \
-    a2dismod mpm_prefork 2>/dev/null; \
-    a2enmod mpm_prefork
+# Fix Apache MPM: remove ALL mpm symlinks, then add ONLY prefork
+RUN rm -f /etc/apache2/mods-enabled/mpm_*.conf /etc/apache2/mods-enabled/mpm_*.load && \
+    ln -sf /etc/apache2/mods-available/mpm_prefork.conf /etc/apache2/mods-enabled/mpm_prefork.conf && \
+    ln -sf /etc/apache2/mods-available/mpm_prefork.load /etc/apache2/mods-enabled/mpm_prefork.load
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
-# Set the document root to the app directory
-ENV APACHE_DOCUMENT_ROOT /var/www/html
-
 # Configure Apache to allow .htaccess overrides
 RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
+
+# Also configure Apache to listen on PORT from env (Railway requirement)
+RUN echo 'PassEnv PORT' >> /etc/apache2/apache2.conf
 
 # Copy app files
 COPY . /var/www/html/
@@ -44,7 +43,10 @@ RUN echo "upload_max_filesize = 10M" >> /usr/local/etc/php/conf.d/uploads.ini &&
     echo "post_max_size = 12M" >> /usr/local/etc/php/conf.d/uploads.ini && \
     echo "max_execution_time = 60" >> /usr/local/etc/php/conf.d/uploads.ini
 
-# Railway uses PORT env var
+# Verify only one MPM is loaded (build-time check)
+RUN ls -la /etc/apache2/mods-enabled/mpm_* && \
+    apache2ctl -t -D DUMP_MODULES 2>&1 | grep mpm
+
 EXPOSE 80
 
 ENTRYPOINT ["docker-entrypoint.sh"]
