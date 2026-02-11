@@ -1,8 +1,10 @@
 #!/bin/bash
 set -e
 
-# Generate config_db.php from environment variables
-cat > /var/www/html/config_db.php << DBEOF
+# Only generate config_db.php if it doesn't already exist
+# (The installer creates/updates this file, we don't want to overwrite it on redeploys)
+if [ ! -f /var/www/html/config_db.php ]; then
+    cat > /var/www/html/config_db.php << DBEOF
 <?php
 define('DB_HOST', '${DB_HOST:-mysql.railway.internal}');
 define('DB_USERNAME', '${DB_USERNAME:-root}');
@@ -14,6 +16,10 @@ define('TEST_MAIL', false);
 define('TIDY', true);
 ?>
 DBEOF
+    echo "Generated initial config_db.php"
+else
+    echo "Using existing config_db.php"
+fi
 
 # Use Railway's PORT or default to 8080
 PORT="${PORT:-8080}"
