@@ -2075,7 +2075,7 @@ function send_mail($arg1, $arg2)
 		$mail->Subject = $subject;
 		if (isset($html_mail)) {$mail->MsgHTML($body);} else {$mail->Body = $body;}
 		if (isset($attachment)) {$mail->AddAttachment($attachment);}
-		if (!$mail->Send()) {exit_error('mail failure');}
+		if (!$mail->Send()) { error_log('mail failure: ' . $mail->ErrorInfo); }
 		$mail->ClearAddresses();
 	}
 }
